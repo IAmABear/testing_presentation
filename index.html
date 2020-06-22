@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Testing in a nutshell</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link
+      rel="stylesheet"
+      href="plugin/highlight/monokai.css"
+      id="highlight-theme"
+    />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <section>Introduction</section>
+
+          <section>
+            Floyd van Boksel
+          </section>
+
+          <section>
+            Graduated as a Humand-centered designer
+          </section>
+
+          <section>
+            Unicorn
+          </section>
+
+          <section>
+            Front-end Developer
+          </section>
+        </section>
+        <section>
+          <section>Agenda</section>
+
+          <section>
+            <ul>
+              <!-- Why would u bother, cause its hard right? Common misconceptions -->
+              <li>Why bother testing</li>
+              <!-- Testing pyramid, always go as low as possible -->
+              <li>What to test, when to test</li>
+              <!-- Blackbox vs Whitebox, use picture medium article -->
+              <li>Blackbox, Whitebox and Gray Box testing</li>
+              <!-- Short overview current stack and what it does / where does it belong in the pyramid -->
+              <li>My current testing stack (Jest, Enzyme, Cypress)</li>
+              <!--
+                Some things about how to define what should be tested in Cypress.
+                - Can't we just write all the e2e tests for every little case we know of -> testing pyramid reference
+                - We can mock back-end responses to speeden up our e2e tests -> why u shouldn't
+                - Common cypress pitfall -> Promises and its retry-capability / timeouts
+              -->
+              <li>Writing E2E tests</li>
+              <!--
+                Writing integration tests, where can we write them and how
+                - Should we use Cypress or Enzyme / Jest -> and why both are valid
+                - When is something an integration test -> and why it is often confused with unit testing
+                - How snapshotting can make our lives easy
+              -->
+              <li>Writing integration tests</li>
+              <!--
+                Writing unit tests, how do we write them
+                - What is a unit test, how broad can that term be used -> and why we often write integration tests
+                - Testing the weird stuff (undefined and null parameters)
+                - Mocking is king and why u shouldn't live without it
+                - How coverage can be misleading -> leaking tests
+                - Suggested pattern: Arrange, Act, Assert -> standardize the format
+                - Some code examples
+              -->
+              <li>Writing unit tests</li>
+              <!--
+                Suggested changes to do for people after this meeting
+                - Start small, end big
+                - Split the codes into smaller chunks where it makes sense
+                - A test a day keeps the bug reports away
+              -->
+              <li>Closing notes</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>So, why bother at all?</section>
+          <section>More confidence in our work</section>
+          <section>
+            Make refactoring over time easier
+            <br />
+            (Red, Green, Refactor)
+          </section>
+          <section>
+            Less time testing the mundane stuff and having focus on the complex
+            parts
+          </section>
+          <section>
+            It gives your dedicated tester(s) (if applicable) more time to do
+            really weird stuff with the application
+          </section>
+        </section>
+
+        <section>
+          <section>What to test, when to test</section>
+
+          <section>
+            <img src="./assets/patrick.png" />
+          </section>
+
+          <section>
+            <img src="./assets/testing_pyramid.png" />
+          </section>
+        </section>
+
+        <section>
+          <section>Blackbox, Whitebox and Graybox testing</section>
+          <section>
+            <img
+              src="../assets/blackbox_whitebox.png"
+              style="background-color: white;"
+            />
+          </section>
+        </section>
+
+        <section>
+          <section>My current testing stack (Cypress, Enzyme + Jest)</section>
+          <section>
+            <p>Cypress</p>
+
+            <ul>
+              <li>JavaScript based</li>
+              <li>E2E / Integration</li>
+              <li>Simulate user scenario's</li>
+            </ul>
+          </section>
+          <section>
+            <p>Enzyme + Jest</p>
+
+            <ul>
+              <li>JavaScript based</li>
+              <li>Integration / Unit</li>
+              <li>Simulate (partial) application behaviour</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>Writing E2E tests</section>
+          <section>
+            Follow the path of the user, not the code.
+          </section>
+          <section>
+            <p>Common pitfalls / Tips</p>
+
+            <ul>
+              <li>
+                Keep the testing pyramid in mind, don't test all the edge cases
+                all the time.
+              </li>
+              <li>Avoid using breakable selectors like css classes</li>
+              <li>Using promises in Cypress is almost like a normal promise</li>
+              <li>
+                Cypress its retry ability is limited and doesn't apply on every
+                command, only when the command that query the DOM.
+              </li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>Writing integration tests</section>
+
+          <section>
+            Testing an isolated part of the application, with its dependencies.
+          </section>
+
+          <section>
+            <ul>
+              <li>Possible to write in Cypress or Jest + Enzyme</li>
+              <li>
+                Both have advantages and disadvantages (Cypress visual feedback
+                better and easier to debug vs Jest + Enzyme speed.)
+              </li>
+              <li>
+                Tends to either test integration in the UI (and remove the
+                back-end from the equation) or test the integration of the
+                back-end (and remove the front-end from the equation).
+              </li>
+              <li>
+                Snapshots can be a real easy way to quickly to an integration
+                test
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <p>A snapshot example</p>
+
+            <pre>
+              <code data-trim>
+                exports[`FormFieldLicensePlate component renders correctly 1`] = `
+                "<form novalidate class=\\"form form--horizontal\\">
+                  <header class=\\"form__header\\" aria-live=\\"assertive\\"></header>
+                  <div class=\\"form__block\\">
+                    <fieldset>
+                      <div class=\\"form__set\\">
+                        <div class=\\"form__field form__field--m\\">
+                          <label class=\\"typography--body-text\\" for=\\"license-plate\\" id=\\"license-plate-label\\">Kenteken</label>
+                          <div class=\\"form__field-wrapper form__field-wrapper--m\\">
+                            <input class=\\"typography--field-text input input-license-plate\\" type=\\"text\\" id=\\"license-plate\\" name=\\"license-plate\\" placeholder required aria-required data-hj-suppress value maxlength=\\"9\\" autocomplete=\\"off\\" aria-labelledby=\\"license-plate-label license-plate-error-area\\" />
+                          </div>
+                          <span class=\\"typography--component-status-text form__text\\"></span>
+                          <div class=\\"typography--component-error-messages-text form__message\\" aria-live=\\"assertive\\" id=\\"license-plate-error-area\\" style=\\"display: block;\\"></div>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </form>"
+                `;
+              </code>
+            </pre>
+
+          </section>
+        </section>
+
+        <section>
+          <section>Writing unit tests</section>
+          <section>Testing the isolated unit of code.</section>
+          <section>
+            <ul>
+              <li>
+                Avoid testing dependencies (other components that are renderd,
+                third-party methods / utility methodes
+              </li>
+              <li>
+                Try to mock methods / components as much as possible to simplify
+                testing
+              </li>
+              <li>Avoid making your unit test an integration test</li>
+              <li>Organise the tests and describe the context we work with. Making a story of what our component/method does.</li>
+              <li>Unpopular opinion: Coverage is a tool, not a rule</li>
+            </ul>
+          </section>
+
+          <section>
+            <p>Let's have some examples shall we.</p>
+          </section>
+
+          <section>
+            <p>Some patterns that we will use</p>
+
+            <ul>
+              <li>Arrange, Act, Assert</li>
+              <li>Naming conventions such as:</li>
+              <ul>
+                <li>Using 'describe' to paint the context we are working with</li>
+                <li>Prefixing '#' in a describe means we are testing a method</li>
+                <li>Prefer the use of 'it' instead of 'test' solely since it reads nicer, this is however a personal preference and by now means a hard rule I enforce.</li>
+              </ul>
+              <li>The sentence of all the 'describe' and 'it' should be a readable sentence</li>
+            </ul>
+          </section>
+
+          <section>
+            <pre>
+              <code data-trim data-line-numbers="2|3-5|7|9-11|13-22|14-20|20-23|25">
+                <script>
+                    const isItSafeToDrink = async (day, additionalValidation) => {
+                      if (!day) {
+                        throw new Error('We need a day');
+                      }
+
+                      const lowerCasedDay = day.toLocaleLowerCase();
+
+                      if (lowerCasedDay === 'monday') {
+                        return false;
+                      }
+
+                      if (additionalValidation) {
+                        try {
+                          const additionalValidationResponse = await additionalValidation(
+                            lowerCasedDay
+                          );
+
+                          return additionalValidationResponse;
+                        } catch (e) {
+                          return false;
+                        }
+                      }
+
+                      return true;
+                    };
+                </script>
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <pre>
+              <code data-trim data-line-numbers="2|4|5,17|6-18|8|10-16|20|21-22|24|25-29|32|33-34|36-38|40-42|44|45-49|52|53-57|62|63-64|66|67-71|74|75-76|78-80|82|83-85|87|88-93|97|98-100|102|103-108|112|113-115|117|118-123|">
+                <script>
+                  import isItSafeToDrink from './isItSafeToDrink';
+
+                  describe('#isItSafeToDrink', () => {
+                    describe('when no day is provided', () => {
+                      it('should throw an error', async () => {
+                        // U need this little bugger
+                        expect.assertions(1);
+
+                        try {
+                          // Act
+                          await isItSafeToDrink();
+                        } catch (e) {
+                          // Assert
+                          expect(e).toEqual(new Error('We need a day'));
+                        }
+                      });
+                    });
+
+                    describe('when it is monday', () => {
+                      // Arrange
+                      const day = 'monday';
+
+                      it('should not be safe to drink', async () => {
+                        // Act
+                        const response = await isItSafeToDrink(day);
+
+                        // Assert
+                        expect(response).toEqual(false);
+                      });
+
+                      describe('and given additional validation to check that say its safe to drink', () => {
+                        // Arrange
+                        const additionalValidations = jest.fn();
+
+                        beforeAll(() => {
+                          additionalValidations.mockResolvedValue(true);
+                        });
+
+                        afterAll(() => {
+                          additionalValidations.mockReset()
+                        })
+
+                        it('should not be safe to drink', async () => {
+                          // Act
+                          const response = await isItSafeToDrink(day, additionalValidations);
+
+                          // Assert
+                          expect(response).toEqual(false);
+                        });
+
+                        it('should not call the additional validations', () => {
+                          // Act
+                          const response = await isItSafeToDrink(day, additionalValidations);
+
+                          // Assert
+                          expect(additionalValidations).toHaveBeenCalledTimes(0);
+                        })
+                      });
+                    });
+
+                    describe('when it is not monday', () => {
+                      // Arrange
+                      const day = 'not monday, maybe thursday';
+
+                      it('should be safe to drink', async () => {
+                        // Act
+                        const response = await isItSafeToDrink(day);
+
+                        // Assert
+                        expect(response).toEqual(true);
+                      });
+
+                      describe('and given additional validation to check ', () => {
+                        // Arrange
+                        const additionalValidations = jest.fn();
+
+                        afterEach(() => {
+                          additionalValidations.mockReset();
+                        });
+
+                        describe('and the additional validations say its safe to drink', () => {
+                          beforeEach(() => {
+                            additionalValidations.mockResolvedValue(true);
+                          });
+
+                          it('should be safe to drink', async () => {
+                            // Act
+                            const response = await isItSafeToDrink(day, additionalValidations);
+
+                            // Assert
+                            expect(additionalValidations).toHaveBeenCalledTimes(1);
+                            expect(response).toEqual(true);
+                          });
+                        });
+
+                        describe('when the additional validations say its not safe to drink', () => {
+                          beforeEach(() => {
+                            additionalValidations.mockResolvedValue(false);
+                          });
+
+                          it('should not be safe to drink', async () => {
+                            // Act
+                            const response = await isItSafeToDrink(day, additionalValidations);
+
+                            // Assert
+                            expect(additionalValidations).toHaveBeenCalledTimes(1);
+                            expect(response).toEqual(false);
+                          });
+                        });
+
+                        describe('and the additional validations thrown an error', () => {
+                          beforeEach(() => {
+                            additionalValidations.mockRejectedValue('Additional checks crashed');
+                          });
+
+                          it('should not be safe to drink', async () => {
+                            // Act
+                            const response = await isItSafeToDrink(day, additionalValidations);
+
+                            // Assert
+                            expect(additionalValidations).toHaveBeenCalledTimes(1);
+                            expect(response).toEqual(false);
+                          });
+                        });
+                      });
+                    });
+                  });
+                </script>
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <img src="./assets/terminal_jest.png"/>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            Closing notes
+          </section>
+
+          <section>
+            <ul>
+              <li>Try to simplify your methods / components and give them a single responsibility to make testing easier.</li>
+              <li>When starting out it can be usefull to start with E2E tests since there are less complex to make and give a solid return</li>
+              <li>Using mocks may seem confusing at first, but they remove the need to know everything other methods do</li>
+            </ul>
+          </section>
+
+          <section>
+            <ul>
+              <li>It's hard</li>
+              <li>It's time consuming</li>
+              <li>I don't know what to test</li>
+              <li>I only write perfect code and don't need to test</li>
+            </ul>
+          </section>
+
+          <section>
+            <ul>
+              <li>Yes this presentation took long, sorry about that. Testing is quite a broad topic which I tend to talk a lot about.</li>
+              <li>If people want a more deep-dive into writing tests please let me know and I'll see when we can plan a date</li>
+              <li>If u have questions that I did not answer during this presentation / Q&A dont hesitate to poke me on slack or email. Usually I have more time to explain some stuff in-depth then the overview that is presented here.</li>
+            </ul>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
